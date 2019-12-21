@@ -3,6 +3,8 @@
 import os
 import csv
 import re
+import sys 
+sys.setrecursionlimit(10**6) 
 
 
 def read_article(article_id):

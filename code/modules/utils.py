@@ -122,7 +122,7 @@ def getWordSpans(text):
     except :
         return -1
     if(wordlist[-1][1]==wordlist[-1][0]):
-        wordlist=wordlist[-1]
+        wordlist=wordlist[:-1]
     if(text[-1].isalpha()):
         wordlist[-1][1]+=1
     return wordlist

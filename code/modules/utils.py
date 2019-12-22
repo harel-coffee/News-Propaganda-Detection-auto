@@ -146,3 +146,21 @@ def getCharSpans(prediction,wordlist):
 def pred_span(text,prediction):
     wordlist=getWordSpans(text)
     return getCharSpans(prediction,wordlist)   
+
+def getLabeledWords(article_id):
+    text, spans = read_article(article_id)
+    wordlist = getWordSpans(text)
+    
+    words = []
+    labels = [0]*len(wordlist)
+    for i in range(len(wordlist)):
+        for span in spans:
+            if (wordlist[i][0] in range(span[0], span[1]+1)) & (wordlist[i][1] in range(span[0], span[1]+1)):
+                labels[i] = 1
+                break
+    for word in wordlist:
+        words.append(text[word[0]:word[1]])
+        
+    assert (len(words)==len(labels))
+    
+    return words, labels

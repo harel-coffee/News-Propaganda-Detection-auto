@@ -60,6 +60,8 @@ class FastTextTdLstmDataset(Dataset):
         x_r, x_l = self.x_right_seqs[idx], self.x_left_seqs[idx]
         
         x_r_ftxt, x_l_ftxt = torch.cat(x_r, dim=0), torch.cat(x_l, dim=0)
+        x_target_ftxt = torch.cat([x_r[-1]]*len(x_r))
+        x_r_ftxt, x_l_ftxt = torch.cat((x_r_ftxt, x_target_ftxt), dim=1), torch.cat((x_l_ftxt, x_target_ftxt), dim=1)
         y_ = torch.tensor(self.y[idx])
         
         return x_r_ftxt, x_l_ftxt, y_

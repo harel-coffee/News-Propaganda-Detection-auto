@@ -107,6 +107,7 @@ def label_article_chars(article_id):
 
 #Word Level Data Processing
 def getWordSpans(text):
+    text=re.sub("\w[\'’]\w",'aa',text)
     wordlist=[]
     def trans(text,pointer=0):
         if pointer==len(text)-1:
@@ -166,3 +167,67 @@ def getLabeledWords(article_id):
     assert (len(words)==len(labels))
     
     return words, labels
+
+def get_BIO(article_id,pair=True,cleaner=None):
+    text, p_spans = read_article(article_id)
+    spans = getWordSpans(text)
+    span_starts,span_stops = [span[0] for span in spans],[span[1] for span in spans]
+    pre_BIO=[0]*len(spans)
+    words = [text[span[0]:span[1]] for span in spans]
+    for span in p_spans:
+        x,y=span_starts.index(span[0]),span_stops.index(span[1])
+        pre_BIO[x]+=1
+        pre_BIO[y]-=1
+        if x==y:
+            pre_BIO[x]='X'
+    BIO=[]
+    pointer=0
+    for val in pre_BIO:
+        if type(val)==int:
+            pointer+=val
+        if val!=0:
+            BIO.append('B')
+        else:
+            if pointer > 0:
+                BIO.append('I')
+            else:
+                BIO.append('O')
+    if cleaner!=None:
+        BIO_zip=[(cleaner(word),bio) for word,bio in zip(words,BIO)]
+        words=[cleaner(word) for word in words]
+    else:
+        BIO_zip=[(word,bio) for word,bio in zip(words,BIO)]
+    if pair:
+        return BIO_zip
+    else:
+        return words,BIO
+
+def decode_BIO(BIO):
+    bio=BIO
+    BIO='O'+''.join(BIO)+'O'
+    spans=[]
+    pointer=0
+    while 'OB' in BIO[pointer:]:
+        try :
+            spans.append((BIO.index('OB',pointer),BIO.index('BO',pointer)-1))
+            pointer=BIO.index('BO',pointer)+1
+        except:
+            break
+    BIO=bio
+    output=[]
+    for span in spans:
+        start,end=span
+        if start==end:
+            output.append([start,end])
+        else:
+            for pointer in range(start,end):
+                if BIO[pointer] == 'B':
+                    output.append([pointer,end])
+    return output
+
+def Char_pred(BIO,article_id):
+    text=read_article(article_id)[0]
+    decoded=decode_BIO(BIO)
+    wordlist=getWordSpans(text)
+    charSpans=[[wordlist[span[0]][0],wordlist[span[1]][1]]for span in decoded]
+    return charSpans        

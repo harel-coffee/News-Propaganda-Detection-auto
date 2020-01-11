@@ -107,7 +107,7 @@ def label_article_chars(article_id):
 
 #Word Level Data Processing
 def getWordSpans(text):
-    text=re.sub("\w[\'’]\w",'aa',text)
+    text=re.sub("\w[\'‘’“”]\w",'aaa',text)
     wordlist=[]
     def trans(text,pointer=0):
         if pointer==len(text)-1:
@@ -230,4 +230,7 @@ def Char_pred(BIO,article_id):
     decoded=decode_BIO(BIO)
     wordlist=getWordSpans(text)
     charSpans=[[wordlist[span[0]][0],wordlist[span[1]][1]]for span in decoded]
-    return charSpans        
+    return charSpans
+
+def word_list(text,span_list):
+    return [text[span[0]:span[1]] for span in span_list]

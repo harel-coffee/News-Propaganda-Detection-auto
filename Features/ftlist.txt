@@ -1,2 +1,3 @@
-000		Capital Word Count (Normalized)
-001		Repetitions (Fuzzy,Levens)
+000		Word+Char TFIDF + Length			TFID_Len.npy
+001		Capital Word Count (Normalized)		Normal_Caps.npy
+002		Repetitions (Fuzzy,Levens)			,

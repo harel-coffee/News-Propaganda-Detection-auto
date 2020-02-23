@@ -1,0 +1,2 @@
+000		Capital Word Count (Normalized)
+001		Repetitions (Fuzzy,Levens)

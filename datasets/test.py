@@ -18,4 +18,4 @@ def rep_c(df):
   return ret_df
 
 fuz=rep_c(train)
-train.to_csv('Fuzz_table.csv')
+fuz.to_csv('Fuzz_table.csv')

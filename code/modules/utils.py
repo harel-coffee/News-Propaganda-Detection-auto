@@ -113,10 +113,10 @@ def getWordSpans(text):
         if pointer==len(text)-1:
             return True
         else:
-            while(not text[pointer].isalpha() and pointer<len(text)-1):
+            while(text[pointer]==' ' and pointer<len(text)-1):
                 pointer=pointer+1
             s=pointer
-            while(text[pointer].isalpha() and pointer<len(text)-1):
+            while(not text[pointer]==' ' and pointer<len(text)-1):
                 pointer=pointer+1
             wordlist.append([s,pointer])
             return trans(text,pointer)

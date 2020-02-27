@@ -133,6 +133,7 @@ labels=list(label_df.keys())
 
 #POS Tagging
 NLP=df['Sentence'].apply(lambda x : nlp(x))
+
 def p_pos(doc):
   doc=nlp(doc)
   for token in doc:
@@ -187,3 +188,48 @@ LDA = LatentDirichletAllocation(n_components=14, random_state=1234)
 LDA.fit(doc_term_matrix)
 
 #TFIDF
+
+
+#BASELINE
+tfidf = TfidfVectorizer(sublinear_tf=True, min_df=5,ngram_range=(2,6),stop_words='english',analyzer='char')
+tfidf_w = TfidfVectorizer(sublinear_tf=True, min_df=6,ngram_range=(1,3),stop_words='english',analyzer='word')
+features = np.append(tfidf.fit_transform(df.Sentence).toarray(),df[['Span', 'PERSON_', 'NORP_', 'ORG_', 'GPE_']].values,axis=1).astype('float16')
+features = np.append(tfidf_w.fit_transform(df.Sentence).toarray(),features,axis=1)
+X_train, X_test, Y_train, Y_test = train_test_split(features,df['Target'],stratify=df['Target'],test_size=0.2,random_state=1234)
+
+model_lr=LogisticRegression(penalty='l2', solver="liblinear", max_iter=500)
+model_lr.fit(X_train,Y_train)
+pred_lr=model_lr.predict(X_test)
+
+cm=confusion_matrix(Y_test,pred_lr)
+cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+plt.figure(figsize = (10,8))
+sns.heatmap(cm,annot=True)
+
+cf_rep=classification_report(Y_test,pred_lr)
+print(cf_rep)
+
+DF=pd.concat([df,df_dev])
+features = tfidf.fit_transform(DF.Sentence).toarray().astype('float16')
+features_w = tfidf.fit_transform(DF.Sentence).toarray().astype('float16')
+features = np.append(features,DF[['Span', 'PERSON', 'NORP', 'ORG', 'GPE','Words']].values,axis=1)
+features= np.append(features,features_w,axis=1)
+
+DF.tail()
+Train_X, Train_Y = features[:len(df)], DF[:len(df)]['Target']
+Test=features[len(df):]
+Train_X=np.delete(Train_X, 40337, axis=1)
+Test=np.delete(Test, 40337, axis=1)
+
+model_lr=LogisticRegression(penalty='l2', solver="liblinear", max_iter=500)
+model_lr.fit(Train_X, Train_Y)
+pred_lr=model_lr.predict(Test)
+
+##### writing predictions to file
+with open(task_TC_output_file, "w") as fout:
+    for article_id, prediction, span_start, span_end in zip(dev_article_ids, pred_lr, dev_span_starts, dev_span_ends):
+        fout.write("%s\t%s\t%s\t%s\n" % (article_id, prediction, span_start, span_end))
+print("Predictions written to file " + task_TC_output_file)
+
+from google.colab import files
+files.download('./TFIDF_LR.txt')

@@ -1,3 +1,4 @@
 000		Word+Char TFIDF + Length			TFID_Len.npy
 001		Capital Word Count (Normalized)		Normal_Caps.npy
 002		Repetitions (Fuzzy,Levens)			Fuzz_table.csv,lev_table.csv
+003		Named Entities

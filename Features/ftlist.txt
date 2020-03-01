@@ -2,3 +2,4 @@
 001		Capital Word Count (Normalized)		Normal_Caps.npy
 002		Repetitions (Fuzzy,Levens)			Fuzz_table.csv,lev_table.csv
 003		Named Entities
+004 	Sentiment_Polarity

@@ -1,38 +1,20 @@
-from transformers import *
-import time
-import os
-import numpy as np
-import pandas as pd
-import re
-import itertools
-from tqdm import tqdm
-from tqdm import  tqdm_notebook
-import warnings
-warnings.filterwarnings('ignore')
-import matplotlib.pyplot as plt
-import seaborn as sns
-from google.colab import files
-from sklearn.metrics import confusion_matrix
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
-from sklearn.preprocessing import LabelEncoder as LE
-from keras.preprocessing.sequence import pad_sequences
-from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
-import torch
-import glob
-import os.path
-import sys
-import codecs
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
 from .utils_tc import *
-class Dataset:
-    def __init__(self, articles_folder, labels_file):
-        self.articles_folder = articles_folder
-        self.labels_file = labels_file
-        self.articles = read_articles_from_file_list(articles_folder)
-        self.read()
 
+class Dataset:
+    def __init__(self, articles_folder=None, labels_file=None, df=None):
+        assert not ((articles_folder==None or labels_file==None) and df==None), 	"Inputs Invalid"
+
+        if df is None:	        	
+	        self.articles_folder = articles_folder
+	        self.labels_file = labels_file
+	        self.articles = read_articles_from_file_list(articles_folder)
+	        self.read()
+	        self.df=pd.DataFrame()
+	        self.df['Sentences']=self.sentences
+	        self.df['Labels']=self.gold_labels
+        else:
+          self.df=df
+    
     def read(self):
     	articles_id, span_starts, span_ends, self.gold_labels = read_predictions_from_file(self.labels_file)
     	self.spans = [int(end)-int(start) for start, end in zip(span_starts, span_ends)]
@@ -40,11 +22,15 @@ class Dataset:
     	self.sentences=[self.articles[id][int(start):int(end)] for id, start, end in zip(articles_id, span_starts, span_ends)]
     	self.size=len(self.sentences)
 
+    def split(self, test_size=0.1, seed=1234):
+    	a,b= train_test_split(self.df, stratify=self.df['Labels'], test_size=test_size, random_state=seed)
+    	return Dataset(df=a), Dataset(df=b)
 
 
-class SLDataset(Dataset):
-    def __init__(self,  articles_folder=None, labels_file=None, lower=True):
-        super().__init__(articles_folder, labels_file)
+
+
+class SLDataset:
+    def __init__(self,  df, lower=True):
         self.lower=lower
 
     def clean(self):
@@ -66,13 +52,12 @@ class SLDataset(Dataset):
             return ' '.join(text.split())
         
         print("Cleaning Sentences")
-        self.sentences=[text_clean(sentence) for sentence in self.sentences]
+        self.sentences=[text_clean(sentence) for sentence in self.df.Sentences]
 
-class TransformerDataset(Dataset):
-    def __init__(self, articles_folder=None, labels_file=None):
-        super().__init__(articles_folder, labels_file)
+class TransformerDataset:
+    def __init__(self, df):
         self.clean()
-        self.sentences = ["[CLS] " + sentence + " [SEP]" for sentence in self.sentences]
+        self.sentences = df['Sentences'].apply(lambda x : "[CLS] {} [SEP]".format(self.clean(x)))
         self.le=LE()
         self.labels=self.le.fit_transform(self.gold_labels)
 
@@ -99,6 +84,11 @@ class TransformerDataset(Dataset):
         input_ids.append(self.tokenizer.convert_tokens_to_ids(self.tokenized_texts[i]))
       
       input_ids = pad_sequences(input_ids, maxlen=MAX_LEN, dtype="long", truncating="post", padding="post")
+
+      for i in range(len(input_ids)):
+      	if not input_ids[i][-1] == 0:
+      		input_ids[i][-1]=102
+
       attention_masks = []
       # Create a mask of 1s for each token followed by 0s for padding
       for seq in input_ids:

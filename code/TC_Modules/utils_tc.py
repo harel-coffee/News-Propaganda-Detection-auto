@@ -7,14 +7,11 @@ import re
 import itertools
 from tqdm import tqdm
 from tqdm import  tqdm_notebook
-import warnings
-warnings.filterwarnings('ignore')
 import matplotlib.pyplot as plt
 import seaborn as sns
 from google.colab import files
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
 from sklearn.preprocessing import LabelEncoder as LE
 from keras.preprocessing.sequence import pad_sequences
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
@@ -25,6 +22,13 @@ import sys
 import codecs
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+import datetime
+import warnings
+warnings.filterwarnings('ignore')
+from scipy.sparse import hstack
+import random
+import tensorflow as tf
+
 def read_articles_from_file_list(folder_name, file_pattern="*.txt"):
     """
     Read articles from files matching patterns <file_pattern> from  
@@ -67,3 +71,29 @@ def report(true, pred):
     sns.heatmap(cm,annot=True)
     cf_rep=classification_report(true,pred)
     print(cf_rep)
+
+def seed(seed_val=1234):
+	random.seed(seed_val)
+	np.random.seed(seed_val)
+	torch.manual_seed(seed_val)
+	torch.cuda.manual_seed_all(seed_val)
+	torch.backends.cudnn.deterministic = True
+	torch.backends.cudnn.benchmark = False
+
+def check_cuda():
+	device_name = tf.test.gpu_device_name()
+	if device_name == '/device:GPU:0':
+	    print('Found GPU at: {}'.format(device_name))
+	else:
+	    raise SystemError('GPU device not found')
+	if torch.cuda.is_available():     
+	    device = torch.device("cuda")
+	    print('There are %d GPU(s) available.' % torch.cuda.device_count())
+	    print('We will use the GPU:', torch.cuda.get_device_name(0))
+	else:
+	    print('No GPU available, using the CPU instead.')
+	    device = torch.device("cpu")
+
+def check(_seed=1234):
+	seed(seed_val=_seed)
+	check_cuda()

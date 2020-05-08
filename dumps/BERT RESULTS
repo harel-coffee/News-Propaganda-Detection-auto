@@ -1,9 +1,0 @@
-BERT RESULTS
-{
-	lr : 5e-5
-	layers : classifier, pooler, 11
-	scheduler : false
-	model : base-uncased
-	seq : 90
-	epoch : 11
-}

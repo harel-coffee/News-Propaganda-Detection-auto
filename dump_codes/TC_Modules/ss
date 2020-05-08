@@ -1,0 +1,114 @@
+
+======== Epoch 1 / 8 ========
+Training...
+  Batch    40  of    192.    Elapsed: 0:00:18.
+  Batch    80  of    192.    Elapsed: 0:00:35.
+  Batch   120  of    192.    Elapsed: 0:00:53.
+  Batch   160  of    192.    Elapsed: 0:01:10.
+
+  Average training loss: 2.0751
+  Training epcoh took: 0:01:24
+
+Running Validation...
+  Accuracy: 0.3692
+  Validation took: 0:00:10
+
+======== Epoch 2 / 8 ========
+Training...
+  Batch    40  of    192.    Elapsed: 0:00:18.
+  Batch    80  of    192.    Elapsed: 0:00:36.
+  Batch   120  of    192.    Elapsed: 0:00:54.
+  Batch   160  of    192.    Elapsed: 0:01:11.
+
+  Average training loss: 1.6874
+  Training epcoh took: 0:01:26
+
+Running Validation...
+  Accuracy: 0.4400
+  Validation took: 0:00:10
+
+======== Epoch 3 / 8 ========
+Training...
+  Batch    40  of    192.    Elapsed: 0:00:18.
+  Batch    80  of    192.    Elapsed: 0:00:36.
+  Batch   120  of    192.    Elapsed: 0:00:53.
+  Batch   160  of    192.    Elapsed: 0:01:11.
+
+  Average training loss: 1.5255
+  Training epcoh took: 0:01:25
+
+Running Validation...
+  Accuracy: 0.4538
+  Validation took: 0:00:10
+
+======== Epoch 4 / 8 ========
+Training...
+  Batch    40  of    192.    Elapsed: 0:00:18.
+  Batch    80  of    192.    Elapsed: 0:00:36.
+  Batch   120  of    192.    Elapsed: 0:00:53.
+  Batch   160  of    192.    Elapsed: 0:01:11.
+
+  Average training loss: 1.4030
+  Training epcoh took: 0:01:25
+
+Running Validation...
+  Accuracy: 0.5003
+  Validation took: 0:00:10
+
+======== Epoch 5 / 8 ========
+Training...
+  Batch    40  of    192.    Elapsed: 0:00:18.
+  Batch    80  of    192.    Elapsed: 0:00:35.
+  Batch   120  of    192.    Elapsed: 0:00:53.
+  Batch   160  of    192.    Elapsed: 0:01:11.
+
+  Average training loss: 1.2988
+  Training epcoh took: 0:01:25
+
+Running Validation...
+  Accuracy: 0.5343
+  Validation took: 0:00:10
+
+======== Epoch 6 / 8 ========
+Training...
+  Batch    40  of    192.    Elapsed: 0:00:18.
+  Batch    80  of    192.    Elapsed: 0:00:36.
+  Batch   120  of    192.    Elapsed: 0:00:54.
+  Batch   160  of    192.    Elapsed: 0:01:11.
+
+  Average training loss: 1.2172
+  Training epcoh took: 0:01:26
+
+Running Validation...
+  Accuracy: 0.5379
+  Validation took: 0:00:10
+
+======== Epoch 7 / 8 ========
+Training...
+  Batch    40  of    192.    Elapsed: 0:00:18.
+  Batch    80  of    192.    Elapsed: 0:00:36.
+  Batch   120  of    192.    Elapsed: 0:00:53.
+  Batch   160  of    192.    Elapsed: 0:01:11.
+
+  Average training loss: 1.1435
+  Training epcoh took: 0:01:25
+
+Running Validation...
+  Accuracy: 0.5425
+  Validation took: 0:00:10
+
+======== Epoch 8 / 8 ========
+Training...
+  Batch    40  of    192.    Elapsed: 0:00:18.
+  Batch    80  of    192.    Elapsed: 0:00:35.
+  Batch   120  of    192.    Elapsed: 0:00:53.
+  Batch   160  of    192.    Elapsed: 0:01:11.
+
+  Average training loss: 1.0914
+  Training epcoh took: 0:01:25
+
+Running Validation...
+  Accuracy: 0.5527
+  Validation took: 0:00:10
+
+Training complete!

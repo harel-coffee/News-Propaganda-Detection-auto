@@ -6,9 +6,10 @@ import pandas as pd
 import re
 import itertools
 from tqdm import tqdm
-from tqdm import  tqdm_notebook
+from tqdm import tqdm_notebook
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 import matplotlib.pyplot as plt
 import seaborn as sns
 from google.colab import files
@@ -26,6 +27,7 @@ import codecs
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 import random
+
 
 def read_articles_from_file_list(folder_name, file_pattern="*.txt"):
     """
@@ -62,10 +64,11 @@ def read_predictions_from_file(filename):
             span_ends.append(span_end)
     return articles_id, span_starts, span_ends, gold_labels
 
+
 def report(true, pred):
-    cm=confusion_matrix(true, pred)
-    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-    plt.figure(figsize = (10,8))
-    sns.heatmap(cm,annot=True)
-    cf_rep=classification_report(true,pred)
+    cm = confusion_matrix(true, pred)
+    cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(cm, annot=True)
+    cf_rep = classification_report(true, pred)
     print(cf_rep)

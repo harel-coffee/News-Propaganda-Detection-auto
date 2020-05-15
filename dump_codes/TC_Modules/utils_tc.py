@@ -6,7 +6,7 @@ import pandas as pd
 import re
 import itertools
 from tqdm import tqdm
-from tqdm import  tqdm_notebook
+from tqdm import tqdm_notebook
 import matplotlib.pyplot as plt
 import seaborn as sns
 from google.colab import files
@@ -24,10 +24,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 import datetime
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 from scipy.sparse import hstack
 import random
 import tensorflow as tf
+
 
 def read_articles_from_file_list(folder_name, file_pattern="*.txt"):
     """
@@ -64,36 +66,40 @@ def read_predictions_from_file(filename):
             span_ends.append(span_end)
     return articles_id, span_starts, span_ends, gold_labels
 
+
 def report(true, pred):
-    cm=confusion_matrix(true, pred)
-    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-    plt.figure(figsize = (10,8))
-    sns.heatmap(cm,annot=True)
-    cf_rep=classification_report(true,pred)
+    cm = confusion_matrix(true, pred)
+    cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(cm, annot=True)
+    cf_rep = classification_report(true, pred)
     print(cf_rep)
 
+
 def seed(seed_val=1234):
-	random.seed(seed_val)
-	np.random.seed(seed_val)
-	torch.manual_seed(seed_val)
-	torch.cuda.manual_seed_all(seed_val)
-	torch.backends.cudnn.deterministic = True
-	torch.backends.cudnn.benchmark = False
+    random.seed(seed_val)
+    np.random.seed(seed_val)
+    torch.manual_seed(seed_val)
+    torch.cuda.manual_seed_all(seed_val)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
 
 def check_cuda():
-	device_name = tf.test.gpu_device_name()
-	if device_name == '/device:GPU:0':
-	    print('Found GPU at: {}'.format(device_name))
-	else:
-	    raise SystemError('GPU device not found')
-	if torch.cuda.is_available():     
-	    device = torch.device("cuda")
-	    print('There are %d GPU(s) available.' % torch.cuda.device_count())
-	    print('We will use the GPU:', torch.cuda.get_device_name(0))
-	else:
-	    print('No GPU available, using the CPU instead.')
-	    device = torch.device("cpu")
+    device_name = tf.test.gpu_device_name()
+    if device_name == "/device:GPU:0":
+        print("Found GPU at: {}".format(device_name))
+    else:
+        raise SystemError("GPU device not found")
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+        print("There are %d GPU(s) available." % torch.cuda.device_count())
+        print("We will use the GPU:", torch.cuda.get_device_name(0))
+    else:
+        print("No GPU available, using the CPU instead.")
+        device = torch.device("cpu")
+
 
 def check(_seed=1234):
-	seed(seed_val=_seed)
-	check_cuda()
+    seed(seed_val=_seed)
+    check_cuda()
